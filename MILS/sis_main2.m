@@ -1,0 +1,79 @@
+function sis_output = sis_main2(SIS_const,sis_input,version)
+%NOTE: CHANGES--Preprocessing and processing both occur here.We can also
+%define a if-else condition if we want preprocessing to happen in this
+%function or not.Will need SSP_Star_Catalogue.csv also in order to
+%preprocess it.
+%SIS_inputs contains ONE boresight input ONLY. In the outer main function
+%we run a loop to pass as many boresight inputs as we want.
+se_in= SIS_const.in;
+se_ig= SIS_const.ig;
+se_op=SIS_const.op;
+
+sis_boresight_inputs_mat = sis_input.bo;% to check, i defined it as [101.2871554	-16.71611583	10] 
+%and [95.98795792	-52.69566056	20] , worked for both.
+
+se_bo = array2table(sis_boresight_inputs_mat, "VariableNames", ["RA", "Dec", "Roll"]);
+se_bo.se_r0 = [cosd(se_bo.Dec) .* cosd(se_bo.RA), cosd(se_bo.Dec) .* sind(se_bo.RA), sind(se_bo.Dec)];
+if (se_in.Debug_Run == 1); disp('Preprocessing: Boresight Inputs Read'); end
+
+% Preprocessing - Catalogue
+% Preprocesses the SSP_Star_Catalogue.csv and stores it as se_T
+
+% Read the Catalogue from SSP_Star_Catalogue.csv into the Table se_T
+se_T = readtable('SSP_Star_Catalogue.csv');
+if (se_in.Debug_Run == 1); disp('Preprocessing: Catalogue Successfully Read'); end
+
+% Remove the following columns - 'SKY2000_ID'
+se_T = removevars(se_T,{'SKY2000_ID'});
+if (se_in.Debug_Run == 1); disp('Preprocessing: Catalogue Trimmed'); end
+
+% Trim Star Catalogue According to Star Magnitude
+se_T = se_T(se_T.Vmag <= se_in.Magnitude_Limit, :);
+if (se_in.Debug_Run == 1); disp('Preprocessing: Catalogue Modified'); end
+
+% Rename Column Headers / Variable Names
+se_T.Properties.VariableNames{'DE'} = 'Dec';
+se_T.Properties.VariableNames{'pmRA'} = 'pm_RA';
+se_T.Properties.VariableNames{'pmDE'} = 'pm_Dec';
+se_T.Properties.VariableNames{'Vmag'} = 'Magnitude';
+if (se_in.Debug_Run == 1); disp('Preprocessing: Variables Renamed'); end
+
+% Add unit vectors of stars
+se_T.r0 = [cosd(se_T.Dec) .* cosd(se_T.RA), cosd(se_T.Dec) .* sind(se_T.RA), sind(se_T.Dec)];
+if (se_in.Debug_Run == 1); disp('Preprocessing: Converted to Cartesian Coordinates'); end
+
+sis_output.catalogue= se_T;
+if (se_in.Debug_Run == 1); writetable(se_T, './Sensor_Model/Preprocessed_Catalogue/se_SKY2000.csv'); end
+
+fprintf('Preprocessing: Success \n \n');
+fprintf('Preprocessing: Success \n \n');
+
+   %  Processing, and calls all the other functions for the Sensor Model in Processing
+   
+if(version=="Default Block")  
+   
+    se_T = se_PR_1_Trim2FOV(se_T, se_bo, se_op, se_in);
+   
+    se_T = se_PR_2a_ICRS2Lens(se_T, se_bo, se_in);
+    
+    se_T = se_PR_3_Lens2Sensor(se_T, se_op, se_in);
+    
+    se_T = se_PR_4_Trim2Sensor(se_T, se_op, se_in);
+    
+    se_Image_Mat = se_PR_5_Image_Generation(se_T, se_op, se_ig, se_in);
+   
+    se_Image_Mat( se_Image_Mat > 1.79786038275446e-18) = 1;
+   
+   sis_output.image =se_Image_Mat;
+   sis_output.attitude = sis_input.attitude;
+   sis_output.data_table = se_T;    
+   sis_output.status = "Done";
+end  
+
+if(version=="version 3")
+end
+
+imshow(se_Image_Mat)% for a visual of the picture to check if code works- it's not a black image
+
+
+end
