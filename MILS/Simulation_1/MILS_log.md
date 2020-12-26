@@ -1,3 +1,5 @@
+[<img src="https://www.aero.iitb.ac.in/satlab/images/IITBSSP2019.png" width="125"/>](image.png)
+
 # Model-in-Loop Simulation - Log File
 
 ### Simulation ID: 10
@@ -5,17 +7,19 @@
 ### Simulation - Details
 * **Operator**: K T Prajwal Prathiksh
 * **Operator ID**: KTPP
-* **Date**: 12/09/2020
-* **Time**: 20:40:46.286
-* **Computer**: DESKTOP-644IPSL
+* **Date**: 24/10/2020
+* **Time**: 21:37:56.488
+* **Computer**: HOPE
+* **Operating System**: Windows
 * **User**: prajw
 
+
 ### Model-in-Loop Simulation - Details
-* **Feature Extraction - Algorithm**: Default Block
-* **Star-Matching - (Lost-in-Space Mode) Algorithm**: Default Block
+* **Feature Extraction - Algorithm**: Region Growth
+* **Star-Matching - (Lost-in-Space Mode) Algorithm**: 4-Star Matching
 * **Star-Matching - (Tracking Mode) Algorithm**: NONE
-* **Star-Matching - Lost-in-Space Redundancy**: Enabled!
-* **Estimation - Algorithm**: QUEST1
+* **Star-Matching - Lost-in-Space Redundancy**: Disabled
+* **Estimation - Algorithm**: QUEST2
 
 ---
 
@@ -23,28 +27,28 @@
 
 |Mode|Status|Time_Taken - (mm:ss.SS)|
 |:---:|:---:|:---:|
-|LIS|Done|00:30.78|
+|LIS|Done|00:30.10|
 |TM|Done|00:00.00|
 
 ### Simulation - Details
 
 |Iter|FE-Status|SM-Status|SM-Mode|SM-Iter|ES-Status|Time_Taken - (mm:ss.SS)|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|1|Done|Done|LIS|1|
+|1|
 
 ---
 
 
-## ErrorFound!
+### Error Thrown
 
-|Error Identifier|*MATLAB:UndefinedFunction*|
+|Error Identifier|MATLAB:structRefFromNonStruct|
 |:---:|:---:|
-|Error Message|*Undefined function 'es_quest_1' for input arguments of type 'struct'.*|
-
-
-## Saved workspace variables for debugging!
-* **Saved at**: E:\IIT Bombay\SatLab\Star Tracker\Star Matching\STADS\MILS\Simulation_1\error_vars.mat
+|**Error Message**|Dot indexing is not supported for variables of this type.|
+|**Error File**|E:\IIT Bombay - Miscellaneous\Satlab\STADS\Feature_Extraction\Functions\fe_region_growth.m|
+|**Line Number**|6|
+### Saved workspace variables for debugging
+* **Saved at**: E:\IIT Bombay - Miscellaneous\Satlab\STADS\MILS\Simulation_1\error_vars.mat
 
 ---
 
-**Total Time Taken:** 00:00.78
+**Total Time Taken:** 00:30.42
