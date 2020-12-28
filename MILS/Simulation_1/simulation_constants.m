@@ -5,7 +5,7 @@
 %
 %% Star Image Simulations Constants
 SIS_const.in.Debug_Run = 1; % Debug Run or Silent Run
-
+SIS_const.in.threshold=1000000;
 
 SIS_const.in.Magnitude_Limit = 6.5; % Sensor Model Star Magnitude Limit
 SIS_const.in.No_Boresight_Inputs = 15; % Number of Boresight Inputs in se_boresight_inputs.xlsx
