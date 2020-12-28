@@ -69,8 +69,9 @@ end
 %imshow(se_Image_Mat2,[2 4])
 %new_noise=se_Image_Mat+se_Image_Mat2
 %imshow(new_noise,[1 5])
-sis_output.noisy=sis_output.noisy/10000000;
-imshow(sis_output.noisy+sis_output.image*10000000);
+thresh= SIS_const.in.threshold;
+sis_output.noisy=sis_output.noisy/thresh;
+imshow(sis_output.noisy+sis_output.image*thresh);
 end
     
   
